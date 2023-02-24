@@ -110,6 +110,10 @@ const App = () => {
         setNewName('')
         setNewNumber('')
       })
+      .catch(error => {
+        console.log(error.response.data)
+        showNotification(error.response.data.error, true)
+      })
   }
 
   const updatePerson = foundPerson => {
@@ -123,7 +127,8 @@ const App = () => {
         setNewNumber('')
       })
       .catch(error => {
-        showNotification(`Information of ${newName} has already been removed from server`, true)
+        console.log(error.response.data)
+        showNotification(error.response.data.error, true)
       })
   }
 
