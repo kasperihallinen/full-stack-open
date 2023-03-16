@@ -12,11 +12,6 @@ const Blog = ({ blog, user, likeBlog, deleteBlog }) => {
     marginBottom: 5
   }
 
-  const removeButtonStyle = {
-    display: blog.user.username === user.username ? '' : 'none',
-    background: 'lightblue',
-  }
-
   const toggleViewAll = () => {
     setViewAll(!viewAll)
   }
@@ -38,6 +33,11 @@ const Blog = ({ blog, user, likeBlog, deleteBlog }) => {
   }
 
   const additionalInfo = () => {
+    const removeButtonStyle = {
+      display: blog.user.username === user.username ? '' : 'none',
+      background: 'lightblue',
+    }
+
     return (
       <div>
         {blog.url} <br/>
