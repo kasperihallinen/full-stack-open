@@ -11,8 +11,12 @@ const AnecdoteForm = () => {
     dispatch(createAnecdote(content))
   }
 
+  const style = {
+    marginBottom: 20
+  }
+
   return (
-    <div>
+    <div style={style}>
       <h2>create new</h2>
       <form onSubmit={addAnecdote}>
         <div><input name='anecdote'/></div>
