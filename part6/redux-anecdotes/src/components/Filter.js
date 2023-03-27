@@ -9,7 +9,7 @@ const Filter = () => {
     dispatch(filterChange(filter))
   }
   const style = {
-    marginBottom: 10
+    padding: "10px 0px 0px"
   }
 
   return (
