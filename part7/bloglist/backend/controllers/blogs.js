@@ -4,9 +4,7 @@ const Blog = require('../models/blog')
 const { userExtractor } = require('../utils/middleware')
 
 router.get('/', async (request, response) => {
-  const blogs = await Blog
-    .find({})
-    .populate('user', { username: 1, name: 1 })
+  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
 
   response.json(blogs)
 })
@@ -14,8 +12,11 @@ router.get('/', async (request, response) => {
 router.post('/', userExtractor, async (request, response) => {
   const { title, author, url, likes } = request.body
   const blog = new Blog({
-    title, author, url,
-    likes: likes ? likes : 0
+    title,
+    author,
+    url,
+    likes: likes ? likes : 0,
+    comments: [],
   })
 
   const user = request.user
@@ -37,9 +38,13 @@ router.post('/', userExtractor, async (request, response) => {
 })
 
 router.put('/:id', async (request, response) => {
-  const { title, url, author, likes } = request.body
+  const { title, url, author, likes, comments } = request.body
 
-  let updatedBlog = await Blog.findByIdAndUpdate(request.params.id,  { title, url, author, likes }, { new: true })
+  let updatedBlog = await Blog.findByIdAndUpdate(
+    request.params.id,
+    { title, url, author, likes, comments },
+    { new: true }
+  )
 
   updatedBlog = await Blog.findById(updatedBlog._id).populate('user')
 
@@ -55,12 +60,28 @@ router.delete('/:id', userExtractor, async (request, response) => {
     return response.status(401).json({ error: 'operation not permitted' })
   }
 
-  user.blogs = user.blogs.filter(b => b.toString() !== blog.id.toString() )
+  user.blogs = user.blogs.filter((b) => b.toString() !== blog.id.toString())
 
   await user.save()
   await blog.remove()
 
   response.status(204).end()
+})
+
+router.post('/:id/comments', async (request, response) => {
+  const { comment } = request.body
+
+  if (!comment) {
+    return response
+      .status(400)
+      .json({ error: 'comments cannot be empty strings' })
+  }
+
+  const blog = await Blog.findById(request.params.id).populate('user')
+  blog.comments = blog.comments.concat(comment)
+  await blog.save()
+
+  response.status(201).json(blog)
 })
 
 module.exports = router

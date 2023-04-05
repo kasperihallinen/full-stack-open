@@ -3,10 +3,13 @@ import { useMatch, useNavigate } from 'react-router-dom'
 
 import { likeBlog, removeBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
+import Comments from './Comments'
+import { Button } from '@mui/material'
 
 const Blog = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
+
   const user = useSelector((state) => state.loggedUser)
   const blogs = useSelector((state) => state.blogs)
 
@@ -20,7 +23,6 @@ const Blog = () => {
   const canRemove = user && user.username === blog.user.username
 
   const like = () => {
-    console.log(blog)
     const blogToUpdate = { ...blog, likes: blog.likes + 1, user: blog.user.id }
     dispatch(likeBlog(blogToUpdate))
     dispatch(
@@ -50,18 +52,28 @@ const Blog = () => {
   return (
     <div className='blog'>
       <h2>
-        {blog.title} {blog.author}
+        {blog.title} by {blog.author}
       </h2>
-      <div>
+      <div style={{ fontSize: 18 }}>
         <div>
           {' '}
           <a href={blog.url}> {blog.url}</a>{' '}
         </div>
         <div>
-          {blog.likes} likes <button onClick={like}>like</button>
+          {blog.likes} likes{' '}
+          <Button size='small' variant='contained' onClick={like}>
+            like
+          </Button>
         </div>
         <div>added by {blog.user && blog.user.name}</div>
-        {canRemove && <button onClick={remove}>delete</button>}
+        {canRemove && (
+          <p>
+            <Button size='small' variant='outlined' onClick={remove}>
+              delete
+            </Button>
+          </p>
+        )}
+        <Comments blog={blog} />
       </div>
     </div>
   )

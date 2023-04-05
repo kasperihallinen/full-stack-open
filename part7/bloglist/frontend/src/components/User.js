@@ -1,3 +1,4 @@
+import { Table, TableBody, TableCell, TableRow } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { useMatch } from 'react-router-dom'
 
@@ -14,11 +15,17 @@ const User = () => {
     <div>
       <h2>{user.name}</h2>
       <h3>added blogs</h3>
-      <ul>
-        {user.blogs.map((blog) => {
-          return <li key={blog.title}>{blog.title}</li>
-        })}
-      </ul>
+      <Table>
+        <TableBody>
+          {user.blogs.map((blog) => {
+            return (
+              <TableRow key={blog.title}>
+                <TableCell>{blog.title}</TableCell>
+              </TableRow>
+            )
+          })}
+        </TableBody>
+      </Table>
     </div>
   )
 }

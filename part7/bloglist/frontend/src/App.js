@@ -1,17 +1,19 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Routes, Route } from 'react-router-dom'
+import { Container } from '@mui/material'
 
 import Home from './components/Home'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 import UserList from './components/UserList'
 import User from './components/User'
+import Blog from './components/Blog'
+import Menu from './components/Menu'
+
 import { initializeBlogs } from './reducers/blogReducer'
 import { initializeUser } from './reducers/loggedUserReducer'
 import { initializeUsers } from './reducers/userReducer'
-import Blog from './components/Blog'
-import Menu from './components/Menu'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -31,18 +33,18 @@ const App = () => {
 
   if (!user) {
     return (
-      <div>
+      <Container>
         <h2>log in to application</h2>
         <Notification />
         <LoginForm />
-      </div>
+      </Container>
     )
   }
 
   return (
-    <div>
+    <Container>
       <Menu />
-      <h2>Blog app</h2>
+      <h1>Blog app</h1>
       <Notification />
       <Routes>
         <Route path='/' element={<Home />}></Route>
@@ -50,7 +52,7 @@ const App = () => {
         <Route path='/users/:id' element={<User />}></Route>
         <Route path='/blogs/:id' element={<Blog />}></Route>
       </Routes>
-    </div>
+    </Container>
   )
 }
 
