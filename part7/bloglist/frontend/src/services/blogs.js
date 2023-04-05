@@ -1,13 +1,13 @@
 import axios from 'axios'
-import userService from '../services/user'
+import loggedUserService from './loggedUser'
 const baseUrl = '/api/blogs'
 
 const getHeaders = () => {
-  const token = userService.getToken()
+  const token = loggedUserService.getToken()
   return {
     headers: {
-      'Authorization': token ? `Bearer ${token}` : null
-    }
+      Authorization: token ? `Bearer ${token}` : null,
+    },
   }
 }
 
@@ -22,7 +22,11 @@ const create = async (object) => {
 }
 
 const update = async (object) => {
-  const request = await axios.put(`${baseUrl}/${object.id}`, object, getHeaders())
+  const request = await axios.put(
+    `${baseUrl}/${object.id}`,
+    object,
+    getHeaders()
+  )
   return request.data
 }
 

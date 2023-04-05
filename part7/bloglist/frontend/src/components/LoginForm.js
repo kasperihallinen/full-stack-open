@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 
-import { login } from '../reducers/userReducer'
+import { login } from '../reducers/loggedUserReducer'
 
 const LoginForm = () => {
   const [username, setUsername] = useState('')
@@ -33,9 +33,7 @@ const LoginForm = () => {
           onChange={({ target }) => setPassword(target.value)}
         />
       </div>
-      <button
-        id='login-button'
-        type='submit'>
+      <button id='login-button' type='submit'>
         login
       </button>
     </form>
