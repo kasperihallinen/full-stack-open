@@ -3,7 +3,7 @@ import { useState } from 'react'
 import Select from 'react-select'
 import { ALL_AUTHORS, EDIT_AUTHOR } from '../queries'
 
-const Birthyear = ({ authors }) => {
+const Birthyear = ({ authors, notify }) => {
   const [choice, setChoice] = useState({})
   const [born, setBorn] = useState('')
 
@@ -12,7 +12,10 @@ const Birthyear = ({ authors }) => {
   })
 
   const [editAuthor] = useMutation(EDIT_AUTHOR, {
-    refetchQueries: [{ query: ALL_AUTHORS }],
+    refetchQueries: [ALL_AUTHORS],
+    onError: (error) => {
+      notify(error.message)
+    },
   })
 
   const submit = (event) => {
