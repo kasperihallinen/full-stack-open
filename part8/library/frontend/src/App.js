@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient, useSubscription } from '@apollo/client'
+import { ALL_BOOKS, BOOK_ADDED } from './queries.js'
 import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
@@ -19,6 +20,29 @@ const App = () => {
       setToken(userToken)
     }
   }, [])
+
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data }) => {
+      const addedBook = data.data.bookAdded
+      const genres = addedBook.genres.concat('all genres')
+      genres.forEach((genre) => {
+        client.cache.updateQuery(
+          { query: ALL_BOOKS, variables: { genre: genre } },
+          (cachedData) => {
+            if (cachedData) {
+              return {
+                allBooks: cachedData.allBooks.concat(addedBook),
+              }
+            }
+          }
+        )
+      })
+
+      window.alert(
+        `Book "${addedBook.title}" by ${addedBook.author.name} added`
+      )
+    },
+  })
 
   const notify = (message) => {
     setErrorMessage(message)
